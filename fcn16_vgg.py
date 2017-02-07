@@ -56,14 +56,14 @@ class FCN16VGG:
 
         with tf.name_scope('Processing'):
             # rgb = tf.image.convert_image_dtype(rgb, tf.float32)
-            red, green, blue = tf.split(rgb, 3, 3)
+            red, green, blue = tf.split(3, 3, rgb)
             # assert red.get_shape().as_list()[1:] == [224, 224, 1]
             # assert green.get_shape().as_list()[1:] == [224, 224, 1]
             # assert blue.get_shape().as_list()[1:] == [224, 224, 1]
-            bgr = tf.concat([
+            bgr = tf.concat(3, [
                 blue - VGG_MEAN[0],
                 green - VGG_MEAN[1],
-                red - VGG_MEAN[2]], axis=3)
+                red - VGG_MEAN[2]])
 
             if debug:
                 bgr = tf.Print(bgr, [tf.shape(bgr)],
