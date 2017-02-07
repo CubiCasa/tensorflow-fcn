@@ -1,3 +1,33 @@
+### Petteri's updates
+
+`TypeError: Input 'split_dim' of 'Split' Op has type float32 that does not match expected type of int32.`
+
+from direct clone as the [input argument order](https://github.com/tensorflow/tensorflow/issues/6501) used by TensorFlow had changed in **version 0.12** (so again now older versions do not work). And similarly the order of concatenation had changed:
+
+```python
+TypeError: concat() got an unexpected keyword argument 'axis'
+```
+
+So the following changes had to be made, from:
+
+```python
+red, green, blue = tf.split(rgb, 3, 3)
+bgr = tf.concat([
+                blue - VGG_MEAN[0],
+                green - VGG_MEAN[1],
+                red - VGG_MEAN[2]], axis=3)
+```
+
+into: 
+
+```python
+red, green, blue = tf.split(3, 3, rgb)
+bgr = tf.concat(3, [
+                blue - VGG_MEAN[0],
+                green - VGG_MEAN[1],
+                red - VGG_MEAN[2]])
+```
+
 ### Update
 
 An example on how to train FCNs with your own Data can now be found in the [KittiSeg](https://github.com/MarvinTeichmann/KittiSeg) project repository.
